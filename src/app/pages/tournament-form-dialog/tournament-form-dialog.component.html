@@ -1,0 +1,48 @@
+<h2 mat-dialog-title>{{ data?.mode === 'edit' ? 'Edit Tournament' : 'Add Tournament' }}</h2>
+
+<mat-dialog-content class="form-content">
+  <mat-form-field appearance="outline">
+    <mat-label>Event name</mat-label>
+    <input matInput [(ngModel)]="model.name" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Sport</mat-label>
+    <mat-select [(ngModel)]="model.sport">
+      <mat-option *ngFor="let s of sports" [value]="s">{{ s }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Discipline</mat-label>
+    <input matInput [(ngModel)]="model.discipline" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Location</mat-label>
+    <input matInput [(ngModel)]="model.location" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Registration</mat-label>
+    <mat-select [(ngModel)]="model.registration">
+      <mat-option value="Open">Open</mat-option>
+      <mat-option value="Closed">Closed</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Prize</mat-label>
+    <input matInput [(ngModel)]="model.prize" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Description</mat-label>
+    <textarea matInput rows="3" [(ngModel)]="model.description"></textarea>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="save()">{{ data?.mode === 'edit' ? 'Update' : 'Create' }}</button>
+</mat-dialog-actions>

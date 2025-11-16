@@ -1,0 +1,43 @@
+<div class="login-shell">
+  <mat-card class="login-card">
+    <div class="logo-row">
+      <h2>TurniriMk Admin</h2>
+    </div>
+
+    <p class="subtitle">Sign in to manage tournaments</p>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput [(ngModel)]="email" type="email" autocomplete="username" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input matInput [(ngModel)]="password" type="password" autocomplete="current-password" />
+    </mat-form-field>
+
+    <div class="actions">
+      <button mat-flat-button color="primary" (click)="submit()" [disabled]="loading">
+       @if(!loading){
+         <mat-icon>login</mat-icon>
+
+       }
+         @if(loading){
+
+         <mat-icon>hourglass_top</mat-icon>
+       }
+        {{ loading ? 'Signing in...' : 'Sign in' }}
+      </button>
+    </div>
+@if(error){
+  <div class="error">
+    {{ error }}
+  </div>
+
+}
+
+    <div class="hint">
+      Use the admin user you created in Firebase Authentication.
+    </div>
+  </mat-card>
+</div>

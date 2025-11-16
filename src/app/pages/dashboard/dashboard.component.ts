@@ -1,0 +1,88 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { TournamentService, Tournament } from '../../services/tournament.service';
+import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
+import { TournamentFormDialogComponent } from '../tournament-form-dialog/tournament-form-dialog.component';
+import { Observable } from 'rxjs';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+
+@Component({
+  selector: 'app-admin-dashboard',
+  standalone: true,
+  imports: [CommonModule, MatTableModule, MatCardModule, MatButtonModule, MatIconModule, MatSnackBarModule],
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss']
+})
+export class DashboardComponent {
+  tournaments$: Observable<Tournament[]>;
+  displayedColumns = ['name', 'sport', 'discipline', 'location', 'registration', 'actions'];
+
+  // provide the sports list (reuse same array you have)
+  sports = [
+    'All','Animal Sports','Athletics','Badminton','Basketball','Billiard','Board Sports','Bowling','Climbing',
+    'Combat Sports','Cycling','ESports','Football','Golf','Gymnastics','Handball','Hiking','Ice Sports','Padel',
+    'Parasports','Racing','Rugby','Tennis','Teqball','Volleyball','Water Sports','Weapons'
+  ];
+
+  constructor(
+    private svc: TournamentService,
+    private dialog: MatDialog,
+    private snack: MatSnackBar
+  ) {
+    this.tournaments$ = this.svc.list();
+this.tournaments$.subscribe(data => {
+  console.log("TOURNAMENTS FROM FIRESTORE:", data);
+});
+  }
+
+  async openCreate() {
+    const ref = this.dialog.open(TournamentFormDialogComponent, {
+      data: { mode: 'create', sports: this.sports },
+      width: '520px'
+    });
+
+    const result = await ref.afterClosed().toPromise();
+    if (result) {
+      try {
+        await this.svc.create(result);
+        this.snack.open('Tournament created', 'OK', { duration: 2000 });
+      } catch (err) {
+        console.error(err);
+        this.snack.open('Create failed', 'OK', { duration: 3000 });
+      }
+    }
+  }
+
+  async openEdit(item: Tournament) {
+    const ref = this.dialog.open(TournamentFormDialogComponent, {
+      data: { mode: 'edit', tournament: item, sports: this.sports },
+      width: '520px'
+    });
+
+    const result = await ref.afterClosed().toPromise();
+    if (result) {
+      try {
+        await this.svc.update(item.id as string, result);
+        this.snack.open('Tournament updated', 'OK', { duration: 2000 });
+      } catch (err) {
+        console.error(err);
+        this.snack.open('Update failed', 'OK', { duration: 3000 });
+      }
+    }
+  }
+
+  async delete(item: Tournament) {
+    if (!confirm(`Delete tournament "${item.name}"?`)) return;
+    try {
+      await this.svc.delete(item.id as string);
+      this.snack.open('Tournament deleted', 'OK', { duration: 2000 });
+    } catch (err) {
+      console.error(err);
+      this.snack.open('Delete failed', 'OK', { duration: 3000 });
+    }
+  }
+}
