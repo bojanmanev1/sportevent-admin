@@ -9,11 +9,26 @@ import { MatDialog } from '@angular/material/dialog';
 import { TournamentFormDialogComponent } from '../tournament-form-dialog/tournament-form-dialog.component';
 import { Observable } from 'rxjs';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatCardModule, MatButtonModule, MatIconModule, MatSnackBarModule],
+imports: [
+  CommonModule,
+  FormsModule,            
+  MatTableModule,
+  MatCardModule,
+  MatButtonModule,
+  MatIconModule,
+  MatSnackBarModule,
+  MatFormFieldModule,     
+  MatInputModule,          
+  MatSelectModule         
+],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -21,9 +36,13 @@ export class DashboardComponent {
   tournaments$: Observable<Tournament[]>;
   displayedColumns = ['name', 'sport', 'discipline', 'location', 'registration', 'actions'];
 
+  filterSport: string = "";
+  filterName: string = "";
+  filteredList: Tournament[] = [];
+
   // provide the sports list (reuse same array you have)
   sports = [
-    'All','Animal Sports','Athletics','Badminton','Basketball','Billiard','Board Sports','Bowling','Climbing',
+    'Animal Sports','Athletics','Badminton','Basketball','Billiard','Board Sports','Bowling','Climbing',
     'Combat Sports','Cycling','ESports','Football','Golf','Gymnastics','Handball','Hiking','Ice Sports','Padel',
     'Parasports','Racing','Rugby','Tennis','Teqball','Volleyball','Water Sports','Weapons'
   ];
@@ -33,11 +52,29 @@ export class DashboardComponent {
     private dialog: MatDialog,
     private snack: MatSnackBar
   ) {
-    this.tournaments$ = this.svc.list();
-this.tournaments$.subscribe(data => {
-  console.log("TOURNAMENTS FROM FIRESTORE:", data);
+this.tournaments$ = this.svc.list();
+
+this.tournaments$.subscribe(list => {
+  this.filteredList = list;
 });
   }
+
+  applyFilter() {
+  this.tournaments$.subscribe(list => {
+    this.filteredList = list.filter(item => {
+
+      const matchSport =
+        !this.filterSport || item.sport === this.filterSport;
+
+      const matchName =
+        !this.filterName ||
+        item.name.toLowerCase().includes(this.filterName.toLowerCase());
+
+      return matchSport && matchName;
+    });
+  });
+}
+
 
   async openCreate() {
     const ref = this.dialog.open(TournamentFormDialogComponent, {

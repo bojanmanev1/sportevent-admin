@@ -11,7 +11,21 @@
   </mat-card>
 
   <mat-card class="table-card">
-    <table mat-table [dataSource]="(tournaments$ | async) ?? []" class="mat-elevation-z2">
+    <div class="filters">
+  <mat-form-field appearance="outline">
+    <mat-label>Filter by sport</mat-label>
+    <mat-select [(ngModel)]="filterSport" (selectionChange)="applyFilter()">
+      <mat-option value="">All</mat-option>
+      <mat-option *ngFor="let s of sports" [value]="s">{{ s }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Search by name</mat-label>
+    <input matInput [(ngModel)]="filterName" (input)="applyFilter()" />
+  </mat-form-field>
+</div>
+    <table mat-table [dataSource]="filteredList" class="mat-elevation-z2">
 
       <!-- Name -->
       <ng-container matColumnDef="name">
