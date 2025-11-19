@@ -1,14 +1,20 @@
 <div class="admin-shell">
-  <mat-card class="tools">
-    <div class="left">
-      <h3>Tournaments</h3>
-    </div>
-    <div class="right">
-      <button mat-flat-button color="primary" (click)="openCreate()">
-        <mat-icon>add</mat-icon> Add
-      </button>
-    </div>
-  </mat-card>
+<mat-card class="tools">
+  <div class="left">
+    <h3>Tournaments</h3>
+  </div>
+
+  <div class="right">
+    <button mat-stroked-button color="warn" (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      Logout
+    </button>
+
+  <button mat-button routerLink="/registrations">
+  <mat-icon>people</mat-icon> Registrations
+</button>
+  </div>
+</mat-card>
 
   <mat-card class="table-card">
     <div class="filters">
@@ -18,12 +24,16 @@
       <mat-option value="">All</mat-option>
       <mat-option *ngFor="let s of sports" [value]="s">{{ s }}</mat-option>
     </mat-select>
+    
   </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Search by name</mat-label>
     <input matInput [(ngModel)]="filterName" (input)="applyFilter()" />
   </mat-form-field>
+    <button mat-flat-button color="primary" (click)="openCreate()">
+      <mat-icon>add</mat-icon> Add
+    </button>
 </div>
     <table mat-table [dataSource]="filteredList" class="mat-elevation-z2">
 

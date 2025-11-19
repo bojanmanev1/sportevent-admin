@@ -8,5 +8,11 @@ export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
-  { path: '**', redirectTo: 'login' }
+  {
+  path: 'registrations',
+  canActivate: [authGuard],
+  loadComponent: () => import('./pages/registrations/registrations.component')
+    .then(c => c.RegistrationsComponent)
+},
+{ path: '**', redirectTo: 'login' }
 ];

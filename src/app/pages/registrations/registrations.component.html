@@ -1,0 +1,46 @@
+<mat-card class="registrations-card">
+
+  <div class="card-header">
+    <h2>Registrations</h2>
+
+    <button mat-stroked-button color="primary" routerLink="/dashboard">
+      <mat-icon>arrow_back</mat-icon>
+      Back
+    </button>
+
+  </div>
+
+  <div class="table-wrapper">
+    <table mat-table [dataSource]="(registrations$ | async) ?? []" class="mat-elevation-z2">
+
+      <!-- Tournament -->
+      <ng-container matColumnDef="tournamentName">
+        <th mat-header-cell *matHeaderCellDef> Tournament </th>
+        <td mat-cell *matCellDef="let r"> {{ r.tournamentName }} </td>
+      </ng-container>
+
+      <!-- Name -->
+      <ng-container matColumnDef="userName">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let r"> {{ r.userName }} {{ r.userSurname }} </td>
+      </ng-container>
+
+      <!-- Phone -->
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef> Phone </th>
+        <td mat-cell *matCellDef="let r"> {{ r.phone }} </td>
+      </ng-container>
+
+      <!-- Sport -->
+      <ng-container matColumnDef="sport">
+        <th mat-header-cell *matHeaderCellDef> Sport </th>
+        <td mat-cell *matCellDef="let r"> {{ r.sport }} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="cols"></tr>
+      <tr mat-row *matRowDef="let row; columns: cols"></tr>
+
+    </table>
+  </div>
+
+</mat-card>

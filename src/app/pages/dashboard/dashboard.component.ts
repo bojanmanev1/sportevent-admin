@@ -13,11 +13,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { Auth, signOut } from '@angular/fire/auth';
+import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
 imports: [
+  RouterModule,
   CommonModule,
   FormsModule,            
   MatTableModule,
@@ -50,7 +54,9 @@ export class DashboardComponent {
   constructor(
     private svc: TournamentService,
     private dialog: MatDialog,
-    private snack: MatSnackBar
+    private snack: MatSnackBar,
+      private auth: Auth,
+  private router: Router
   ) {
 this.tournaments$ = this.svc.list();
 
@@ -75,6 +81,10 @@ this.tournaments$.subscribe(list => {
   });
 }
 
+async logout() {
+  await signOut(this.auth);
+  this.router.navigate(['/login']);
+}
 
   async openCreate() {
     const ref = this.dialog.open(TournamentFormDialogComponent, {
