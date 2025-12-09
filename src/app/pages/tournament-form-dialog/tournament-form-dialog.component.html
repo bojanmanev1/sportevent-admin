@@ -33,6 +33,7 @@
     <mat-select [(ngModel)]="model.registration">
       <mat-option value="Open">Open</mat-option>
       <mat-option value="Closed">Closed</mat-option>
+      <mat-option value="Not open yet">Not open yet</mat-option>
     </mat-select>
   </mat-form-field>
 
@@ -41,6 +42,17 @@
     <input matInput [(ngModel)]="model.prize" />
   </mat-form-field>
 
+  
+  <mat-form-field appearance="outline">
+    <mat-label>Latitude</mat-label>
+    <input matInput [(ngModel)]="model.latitude" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+  <mat-label>Longitude</mat-label>
+  <input matInput [(ngModel)]="model.longitude" />
+</mat-form-field>
+  
   <mat-form-field appearance="outline">
     <mat-label>Description</mat-label>
     <textarea matInput rows="3" [(ngModel)]="model.description"></textarea>

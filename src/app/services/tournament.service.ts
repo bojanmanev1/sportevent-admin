@@ -14,6 +14,8 @@ export interface Tournament {
   description?: string;
   imageUrl?: string;
   createdAt?: any;
+  longitude?: any;
+  latitude?: any;
 }
 
 @Injectable({

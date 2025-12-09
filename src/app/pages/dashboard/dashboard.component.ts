@@ -46,9 +46,9 @@ export class DashboardComponent {
 
   // provide the sports list (reuse same array you have)
   sports = [
-    'Animal Sports','Athletics','Badminton','Basketball','Billiard','Board Sports','Bowling','Climbing',
+    'Animal Sports','Athletics','Badminton','Basketball','Billiard','Board Sports','Bowling','Mountain Sports',
     'Combat Sports','Cycling','ESports','Football','Golf','Gymnastics','Handball','Hiking','Ice Sports','Padel',
-    'Parasports','Racing','Rugby','Tennis','Teqball','Volleyball','Water Sports','Weapons'
+    'Parasports','Racing','Rugby','Tennis','Teqball','Volleyball','Water Sports','Weapons', 'Ping Pong'
   ];
 
   constructor(
