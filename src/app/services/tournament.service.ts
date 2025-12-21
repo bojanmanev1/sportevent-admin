@@ -10,12 +10,13 @@ export interface Tournament {
   location?: string;
   registration?: 'Open' | 'Closed';
   startDate?: string; // ISO string
-  prize?: string;
+  fee?: string;
   description?: string;
   imageUrl?: string;
   createdAt?: any;
   longitude?: any;
   latitude?: any;
+  showInTopMenu?: boolean;
 }
 
 @Injectable({
