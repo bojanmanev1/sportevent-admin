@@ -17,6 +17,7 @@ export interface Tournament {
   longitude?: any;
   latitude?: any;
   showInTopMenu?: boolean;
+  website?: string;
 }
 
 @Injectable({
