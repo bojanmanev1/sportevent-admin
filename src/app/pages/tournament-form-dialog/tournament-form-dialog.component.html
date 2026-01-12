@@ -3,29 +3,41 @@
 <mat-dialog-content class="form-content">
   <mat-form-field appearance="outline">
     <mat-label>Event name</mat-label>
-    <input matInput [(ngModel)]="model.name" />
+    <input matInput [(ngModel)]="model.name"  name="name" />
   </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Sport</mat-label>
     <mat-select [(ngModel)]="model.sport">
-      <mat-option *ngFor="let s of sports" [value]="s">{{ s }}</mat-option>
+      @for (s of sports; track s) {
+        <mat-option [value]="s">{{ s }}</mat-option>
+      }
     </mat-select>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Discipline</mat-label>
-    <input matInput [(ngModel)]="model.discipline" />
+    <input matInput [(ngModel)]="model.discipline"  name="discipline"/>
   </mat-form-field>
 
-    <mat-form-field appearance="outline">
-    <mat-label>Starting Date</mat-label>
-    <input matInput [(ngModel)]="model.startDate" />
-  </mat-form-field>
+ 
+  <mat-form-field appearance="outline">
+  <mat-label>Starting Date</mat-label>
+
+  <input
+    matInput
+    [matDatepicker]="startPicker"
+    [(ngModel)]="model.startDate "
+    name="startDate"
+  />
+
+  <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+  <mat-datepicker #startPicker></mat-datepicker>
+</mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Location</mat-label>
-    <input matInput [(ngModel)]="model.location" />
+    <input matInput [(ngModel)]="model.location"  name="location" />
   </mat-form-field>
 
   <mat-form-field appearance="outline">
@@ -39,18 +51,18 @@
 
   <mat-form-field appearance="outline">
     <mat-label>Fee</mat-label>
-    <input matInput [(ngModel)]="model.fee" />
+    <input matInput [(ngModel)]="model.fee"  name="fee"/>
   </mat-form-field>
 
   
   <mat-form-field appearance="outline">
     <mat-label>Latitude</mat-label>
-    <input matInput [(ngModel)]="model.latitude" />
+    <input matInput [(ngModel)]="model.latitude"  name="latitude"/>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
   <mat-label>Longitude</mat-label>
-  <input matInput [(ngModel)]="model.longitude" />
+  <input matInput [(ngModel)]="model.longitude" name="longitude"/>
 </mat-form-field>
   
   <mat-form-field appearance="outline">
@@ -60,7 +72,7 @@
   
   <mat-form-field appearance="outline">
     <mat-label>Description</mat-label>
-    <textarea matInput rows="3" [(ngModel)]="model.description"></textarea>
+    <textarea matInput rows="3" [(ngModel)]="model.description"  name="description"></textarea>
   </mat-form-field>
 
     <mat-slide-toggle

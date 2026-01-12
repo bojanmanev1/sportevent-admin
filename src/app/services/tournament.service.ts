@@ -9,7 +9,7 @@ export interface Tournament {
   discipline?: string;
   location?: string;
   registration?: 'Open' | 'Closed';
-  startDate?: string; // ISO string
+  startDate?: Date | null;
   fee?: string;
   description?: string;
   imageUrl?: string;
