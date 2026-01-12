@@ -8,16 +8,29 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { Tournament } from '../../services/tournament.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { Timestamp } from '@angular/fire/firestore';
+
+
 
 
 @Component({
   selector: 'app-tournament-form-dialog',
   standalone: true,
-  imports: [CommonModule , FormsModule,MatSlideToggleModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule],
+  providers: [provideNativeDateAdapter()],
+  imports: [CommonModule, MatDatepickerModule,MatNativeDateModule, FormsModule,MatSlideToggleModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule],
   templateUrl: './tournament-form-dialog.component.html',
   styleUrls: ['./tournament-form-dialog.component.scss']
 })
+
+
+
+
 export class TournamentFormDialogComponent {
+
+  
   // data: { mode: 'create'|'edit', tournament?: Tournament, sports?: string[] }
   model: Partial<Tournament> = {};
   sports: string[] = [];
@@ -28,16 +41,30 @@ export class TournamentFormDialogComponent {
   ) {
     this.sports = (data?.sports || []);
     this.model = { ...(data?.tournament || {}) };
+
+    const sd: any = this.model.startDate;
+if (sd?.toDate) {
+  // Firestore Timestamp -> Date
+  this.model.startDate = sd.toDate();
+} else if (typeof sd === 'string' && sd) {
+  // string -> Date (if you had stored it as string before)
+  const d = new Date(sd);
+  this.model.startDate = isNaN(d.getTime()) ? null : d;
+} else if (!(sd instanceof Date)) {
+  this.model.startDate = null;
+}
   }
 
-  save() {
-    // Basic form validation
-    if (!this.model.name || !this.model.sport || !this.model.location) {
-      alert('Please fill Name, Sport and Location.');
-      return;
-    }
-    this.dialogRef.close(this.model);
-  }
+ save() {
+  if (!this.model.name || !this.model.sport || !this.model.location) return;
+
+  const payload = {
+    ...this.model,
+    startDate: this.model.startDate ? Timestamp.fromDate(this.model.startDate as Date) : null,
+  };
+
+  this.dialogRef.close(payload);
+}
 
   cancel() {
     this.dialogRef.close(null);
