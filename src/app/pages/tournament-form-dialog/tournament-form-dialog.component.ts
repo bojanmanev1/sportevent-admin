@@ -30,8 +30,6 @@ import { Timestamp } from '@angular/fire/firestore';
 
 export class TournamentFormDialogComponent {
 
-  
-  // data: { mode: 'create'|'edit', tournament?: Tournament, sports?: string[] }
   model: Partial<Tournament> = {};
   sports: string[] = [];
 

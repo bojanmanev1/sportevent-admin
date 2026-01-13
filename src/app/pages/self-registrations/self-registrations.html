@@ -1,63 +1,124 @@
 <div class="admin-shell">
   <mat-card class="table-card">
+ <div class="card-header">  
+   <h2>Self registered tournaments</h2>
+   <button mat-stroked-button color="primary" [routerLink]="['/dashboard']">
+ <mat-icon>arrow_back</mat-icon>
+ Back
+</button>
+ </div>
 
-    <h3>Self registered tournaments</h3>
-        <button mat-stroked-button color="primary" routerLink="/dashboard">
-      <mat-icon>arrow_back</mat-icon>
-      Back
-    </button>
+  <table mat-table [dataSource]="(registrations$ | async) ?? []" class="mat-elevation-z2">
 
-    <table mat-table [dataSource]="(registrations$ | async) ?? []" class="mat-elevation-z2">
+  <!-- Name -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Event </th>
+    <td mat-cell *matCellDef="let el">{{ el.name }}</td>
+  </ng-container>
 
-      <!-- Name -->
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef> Event </th>
-        <td mat-cell *matCellDef="let el">{{ el.name }}</td>
-      </ng-container>
+  <!-- Sport -->
+  <ng-container matColumnDef="sport">
+    <th mat-header-cell *matHeaderCellDef> Sport </th>
+    <td mat-cell *matCellDef="let el">{{ el.sport }}</td>
+  </ng-container>
 
-      <!-- Sport -->
-      <ng-container matColumnDef="sport">
-        <th mat-header-cell *matHeaderCellDef> Sport </th>
-        <td mat-cell *matCellDef="let el">{{ el.sport }}</td>
-      </ng-container>
+  <!-- Discipline -->
+  <ng-container matColumnDef="discipline">
+    <th mat-header-cell *matHeaderCellDef> Discipline </th>
+    <td mat-cell *matCellDef="let el">{{ el.discipline || '-' }}</td>
+  </ng-container>
 
-      <!-- Location -->
-      <ng-container matColumnDef="location">
-        <th mat-header-cell *matHeaderCellDef> Location </th>
-        <td mat-cell *matCellDef="let el">{{ el.location }}</td>
-      </ng-container>
+  <!-- Start Date -->
+  <ng-container matColumnDef="startDate">
+    <th mat-header-cell *matHeaderCellDef> Start </th>
+    <td mat-cell *matCellDef="let el">
+      {{ toDate(el.startDate) | date:'dd.MM.yyyy' }}
+    </td>
+  </ng-container>
 
-      <!-- Status -->
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef> Status </th>
-        <td mat-cell *matCellDef="let el">
-          <span class="status" [class.pending]="el.status === 'pending'">
-            {{ el.status }}
-          </span>
-        </td>
-      </ng-container>
+  <!-- Location -->
+  <ng-container matColumnDef="location">
+    <th mat-header-cell *matHeaderCellDef> Location </th>
+    <td mat-cell *matCellDef="let el">{{ el.location }}</td>
+  </ng-container>
 
-      <!-- Actions -->
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let el">
-          <button mat-icon-button color="primary" matTooltip="Approve">
-            <mat-icon>check_circle</mat-icon>
-          </button>
+  <!-- Registration -->
+  <ng-container matColumnDef="registration">
+    <th mat-header-cell *matHeaderCellDef> Registration </th>
+    <td mat-cell *matCellDef="let el">{{ el.registration }}</td>
+  </ng-container>
 
-          <button mat-icon-button color="warn" matTooltip="Reject">
-            <mat-icon>cancel</mat-icon>
-          </button>
+  <!-- Fee -->
+  <ng-container matColumnDef="fee">
+    <th mat-header-cell *matHeaderCellDef> Fee </th>
+    <td mat-cell *matCellDef="let el">{{ el.fee ?? '-' }}</td>
+  </ng-container>
 
-          <button mat-icon-button matTooltip="View">
-            <mat-icon>visibility</mat-icon>
-          </button>
-        </td>
-      </ng-container>
+  <!-- Website -->
+  <ng-container matColumnDef="website">
+    <th mat-header-cell *matHeaderCellDef> Website </th>
+    <td mat-cell *matCellDef="let el">
+      @if (el.website) {
+        <a [href]="el.website" target="_blank" rel="noopener">Link</a>
+      } @else {
+        -
+      }
+    </td>
+  </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
+  <!-- Status -->
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef> Status </th>
+    <td mat-cell *matCellDef="let el">
+      <span class="status"
+        [class.pending]="el.status === 'pending'"
+        [class.approved]="el.status === 'approved'"
+        [class.rejected]="el.status === 'rejected'">
+        {{ el.status }}
+      </span>
+    </td>
+  </ng-container>
+
+  <!-- Actions -->
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let el">
+
+      <button
+        mat-icon-button
+        color="primary"
+        matTooltip="Approve"
+        (click)="approve(el)"
+        [disabled]="el.status !== 'pending'"
+      >
+        <mat-icon>check_circle</mat-icon>
+      </button>
+
+      <button
+        mat-icon-button
+        color="warn"
+        matTooltip="Reject"
+        (click)="reject(el)"
+        [disabled]="el.status !== 'pending'"
+      >
+        <mat-icon>cancel</mat-icon>
+      </button>
+
+      <button
+        mat-icon-button
+        matTooltip="View description"
+        (click)="view(el)"
+      >
+        <mat-icon>visibility</mat-icon>
+      </button>
+
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
+
 
   </mat-card>
 </div>
