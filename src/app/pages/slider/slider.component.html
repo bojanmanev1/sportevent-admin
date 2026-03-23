@@ -1,0 +1,73 @@
+<div class="slider-admin-page">
+
+    <div class="card-header">
+
+    <button mat-stroked-button color="primary" routerLink="/dashboard">
+      Back
+    </button>
+
+  </div>
+  <div class="slider-form-card">
+    <h2>{{ editingId ? 'Edit slide' : 'Add slide' }}</h2>
+
+    <div class="form-grid">
+
+      <label>
+        <span>Image</span>
+        <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+      </label>
+
+      <label>
+        <span>Order</span>
+        <input type="number" [(ngModel)]="form.order" />
+      </label>
+
+      <label class="checkbox-row">
+        <input type="checkbox" [(ngModel)]="form.active" />
+        <span>Active</span>
+      </label>
+    </div>
+
+    <div class="current-image" *ngIf="form.imageUrl">
+      <p>Current image:</p>
+      <img [src]="form.imageUrl" alt="Current slide image" />
+    </div>
+
+    <div class="form-actions">
+      <button (click)="save()" [disabled]="loading">
+        {{ loading ? 'Saving...' : (editingId ? 'Update' : 'Create') }}
+      </button>
+
+      <button type="button" class="secondary" (click)="resetForm()" *ngIf="editingId">
+        Cancel
+      </button>
+    </div>
+  </div>
+
+  <div class="slider-list-card">
+    <h2>Slides</h2>
+
+    <div class="slide-list" *ngIf="slides.length; else emptyState">
+      <div class="slide-item" *ngFor="let item of slides">
+        <div class="image-preview">
+          <img [src]="item.imageUrl" />
+        </div>
+
+        <div class="slide-info">
+          <p><strong>Order:</strong> {{ item.order }}</p>
+          <p><strong>Status:</strong> {{ item.active ? 'Active' : 'Inactive' }}</p>
+          <p class="url">{{ item.imageUrl }}</p>
+        </div>
+
+        <div class="slide-actions">
+          <button type="button" (click)="editSlide(item)">Edit</button>
+          <button type="button" class="danger" (click)="deleteSlide(item)">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #emptyState>
+      <p>No slides yet.</p>
+    </ng-template>
+  </div>
+</div>

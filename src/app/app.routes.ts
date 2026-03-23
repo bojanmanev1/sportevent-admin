@@ -15,6 +15,12 @@ export const routes: Routes = [
   loadComponent: () => import('./pages/registrations/registrations.component')
     .then(c => c.RegistrationsComponent)
 },
+  {
+  path: 'sliders',
+  canActivate: [authGuard],
+  loadComponent: () => import('./pages/slider/slider.component')
+    .then(c => c.SliderAdminComponent)
+},
 
 { path: '**', redirectTo: 'login' }
 ];
