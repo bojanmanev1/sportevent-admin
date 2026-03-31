@@ -8,3 +8,14 @@
 mat-form-field {
   width: 100%;
 }
+.status-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 12px 0 16px;
+}
+
+.status-label {
+  font-weight: 600;
+  margin-bottom: 4px;
+}

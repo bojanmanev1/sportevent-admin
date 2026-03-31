@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { Firestore, collection, collectionData, doc, docData, addDoc, updateDoc, deleteDoc, query, orderBy } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
+
+export type TournamentStatus = 'upcoming' | 'ongoing' | 'closed';
+
 export interface Tournament {
   id?: string;
   name: string;
@@ -18,6 +21,7 @@ export interface Tournament {
   latitude?: any;
   showInTopMenu?: boolean;
   website?: string;
+  status: TournamentStatus;
 }
 
 @Injectable({

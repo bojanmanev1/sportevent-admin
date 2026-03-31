@@ -3,7 +3,7 @@
 <mat-dialog-content class="form-content">
   <mat-form-field appearance="outline">
     <mat-label>Event name</mat-label>
-    <input matInput [(ngModel)]="model.name"  name="name" />
+    <input matInput [(ngModel)]="model.name" name="name" />
   </mat-form-field>
 
   <mat-form-field appearance="outline">
@@ -17,27 +17,26 @@
 
   <mat-form-field appearance="outline">
     <mat-label>Discipline</mat-label>
-    <input matInput [(ngModel)]="model.discipline"  name="discipline"/>
+    <input matInput [(ngModel)]="model.discipline" name="discipline" />
   </mat-form-field>
 
- 
   <mat-form-field appearance="outline">
-  <mat-label>Starting Date</mat-label>
+    <mat-label>Starting Date</mat-label>
 
-  <input
-    matInput
-    [matDatepicker]="startPicker"
-    [(ngModel)]="model.startDate "
-    name="startDate"
-  />
+    <input
+      matInput
+      [matDatepicker]="startPicker"
+      [(ngModel)]="model.startDate"
+      name="startDate"
+    />
 
-  <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
-  <mat-datepicker #startPicker></mat-datepicker>
-</mat-form-field>
+    <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+    <mat-datepicker #startPicker></mat-datepicker>
+  </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Location</mat-label>
-    <input matInput [(ngModel)]="model.location"  name="location" />
+    <input matInput [(ngModel)]="model.location" name="location" />
   </mat-form-field>
 
   <mat-form-field appearance="outline">
@@ -51,39 +50,68 @@
 
   <mat-form-field appearance="outline">
     <mat-label>Fee</mat-label>
-    <input matInput [(ngModel)]="model.fee"  name="fee"/>
+    <input matInput [(ngModel)]="model.fee" name="fee" />
   </mat-form-field>
 
-  
   <mat-form-field appearance="outline">
     <mat-label>Latitude</mat-label>
-    <input matInput [(ngModel)]="model.latitude"  name="latitude"/>
+    <input matInput [(ngModel)]="model.latitude" name="latitude" />
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-  <mat-label>Longitude</mat-label>
-  <input matInput [(ngModel)]="model.longitude" name="longitude"/>
-</mat-form-field>
-  
+    <mat-label>Longitude</mat-label>
+    <input matInput [(ngModel)]="model.longitude" name="longitude" />
+  </mat-form-field>
+
   <mat-form-field appearance="outline">
-  <mat-label>Website</mat-label>
-  <input matInput [(ngModel)]="model.website" />
-</mat-form-field>
-  
+    <mat-label>Website</mat-label>
+    <input matInput [(ngModel)]="model.website" />
+  </mat-form-field>
+
   <mat-form-field appearance="outline">
     <mat-label>Description</mat-label>
-    <textarea matInput rows="3" [(ngModel)]="model.description"  name="description"></textarea>
+    <textarea matInput rows="3" [(ngModel)]="model.description" name="description"></textarea>
   </mat-form-field>
 
-    <mat-slide-toggle
-      [(ngModel)]="model.showInTopMenu"
-      color="primary"
+  <div class="status-section">
+    <label class="status-label">Tournament status</label>
+
+    <mat-checkbox
+      [ngModel]="model.status === 'upcoming'"
+      (ngModelChange)="setStatus('upcoming')"
+      name="statusUpcoming"
     >
-      Show in top menu
-    </mat-slide-toggle>
+      Not started yet
+    </mat-checkbox>
+
+    <mat-checkbox
+      [ngModel]="model.status === 'ongoing'"
+      (ngModelChange)="setStatus('ongoing')"
+      name="statusOngoing"
+    >
+      Ongoing
+    </mat-checkbox>
+
+    <mat-checkbox
+      [ngModel]="model.status === 'closed'"
+      (ngModelChange)="setStatus('closed')"
+      name="statusClosed"
+    >
+      Closed
+    </mat-checkbox>
+  </div>
+
+  <mat-slide-toggle
+    [(ngModel)]="model.showInTopMenu"
+    color="primary"
+  >
+    Show in top menu
+  </mat-slide-toggle>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="cancel()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="save()">{{ data?.mode === 'edit' ? 'Update' : 'Create' }}</button>
+  <button mat-raised-button color="primary" (click)="save()">
+    {{ data?.mode === 'edit' ? 'Update' : 'Create' }}
+  </button>
 </mat-dialog-actions>
