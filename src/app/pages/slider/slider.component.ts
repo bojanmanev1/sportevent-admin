@@ -1,3 +1,4 @@
+import { TournamentService } from './../../services/tournament.service';
 import { SliderAdminService, SliderItem } from './../../services/slider.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -14,23 +15,27 @@ import { RouterLink } from '@angular/router';
 })
 export class SliderAdminComponent implements OnInit {
   slides: SliderItem[] = [];
-
-  form = {
-    imageUrl: '',
-    imagePath: '',
-    order: 1,
-    active: true
-  };
+  tournaments: any[] = [];
+ form = {
+  imageUrl: '',
+  imagePath: '',
+  order: 1,
+  active: true,
+  tournamentId: ''
+};
 
   editingId: string | null = null;
   loading = false;
   selectedFile: File | null = null;
 
-  constructor(private sliderService: SliderAdminService) {}
+  constructor(private sliderService: SliderAdminService, private tournamentService:TournamentService) {}
 
   ngOnInit(): void {
     this.sliderService.getSlides().subscribe(items => {
       this.slides = items;
+    });
+    this.tournamentService.list().subscribe(items => {
+      this.tournaments = items;
     });
   }
 
@@ -61,7 +66,8 @@ export class SliderAdminComponent implements OnInit {
         imageUrl,
         imagePath,
         order: this.form.order,
-        active: this.form.active
+        active: this.form.active,
+        tournamentId: this.form.tournamentId || null
       };
 
       if (this.editingId) {
@@ -79,16 +85,17 @@ export class SliderAdminComponent implements OnInit {
     }
   }
 
-  editSlide(item: SliderItem) {
-    this.editingId = item.id ?? null;
-    this.form = {
-      imageUrl: item.imageUrl,
-      imagePath: item.imagePath ?? '',
-      order: item.order,
-      active: item.active
-    };
-    this.selectedFile = null;
-  }
+editSlide(item: SliderItem) {
+  this.editingId = item.id ?? null;
+  this.form = {
+    imageUrl: item.imageUrl,
+    imagePath: item.imagePath ?? '',
+    order: item.order,
+    active: item.active,
+    tournamentId: item.tournamentId ?? ''
+  };
+  this.selectedFile = null;
+}
 
   async deleteSlide(item: SliderItem) {
     if (!item.id) return;
@@ -108,14 +115,15 @@ export class SliderAdminComponent implements OnInit {
     }
   }
 
-  resetForm() {
-    this.editingId = null;
-    this.selectedFile = null;
-    this.form = { 
-      imageUrl: '',
-      imagePath: '',
-      order: 1,
-      active: true
-    };
-  }
+ resetForm() {
+  this.editingId = null;
+  this.selectedFile = null;
+  this.form = { 
+    imageUrl: '',
+    imagePath: '',
+    order: 1,
+    active: true,
+    tournamentId: ''
+  };
+}
 }

@@ -37,29 +37,31 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 export class TournamentFormDialogComponent {
   model: Partial<Tournament> = {};
   sports: string[] = [];
+  coordinates = '';
 
   constructor(
     private dialogRef: MatDialogRef<TournamentFormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.sports = (data?.sports || []);
+    this.sports = data?.sports || [];
     this.model = { ...(data?.tournament || {}) };
 
     const sd: any = this.model.startDate;
     if (sd?.toDate) {
-      // Firestore Timestamp -> Date
       this.model.startDate = sd.toDate();
     } else if (typeof sd === 'string' && sd) {
-      // string -> Date (if you had stored it as string before)
       const d = new Date(sd);
       this.model.startDate = isNaN(d.getTime()) ? null : d;
     } else if (!(sd instanceof Date)) {
       this.model.startDate = null;
     }
 
-    // default status for new tournaments
     if (!this.model.status) {
       this.model.status = 'upcoming';
+    }
+
+    if (this.model.latitude != null && this.model.longitude != null) {
+      this.coordinates = `${this.model.latitude}, ${this.model.longitude}`;
     }
   }
 
@@ -70,9 +72,33 @@ export class TournamentFormDialogComponent {
   save() {
     if (!this.model.name || !this.model.sport || !this.model.location) return;
 
+    let latitude: number | null = null;
+    let longitude: number | null = null;
+
+    if (this.coordinates?.trim()) {
+      const parts = this.coordinates.split(',').map(x => x.trim());
+
+      if (parts.length !== 2) {
+        alert('Coordinates must be in format: latitude, longitude');
+        return;
+      }
+
+      latitude = Number(parts[0]);
+      longitude = Number(parts[1]);
+
+      if (isNaN(latitude) || isNaN(longitude)) {
+        alert('Coordinates must be valid numbers');
+        return;
+      }
+    }
+
     const payload = {
       ...this.model,
-      startDate: this.model.startDate ? Timestamp.fromDate(this.model.startDate as Date) : null,
+      latitude,
+      longitude,
+      startDate: this.model.startDate
+        ? Timestamp.fromDate(this.model.startDate as Date)
+        : null,
       status: this.model.status || 'upcoming'
     };
 

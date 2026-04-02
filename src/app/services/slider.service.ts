@@ -24,6 +24,7 @@ export interface SliderItem {
   imagePath?: string;
   order: number;
   active: boolean;
+  tournamentId: string | null;
 }
 
 @Injectable({ providedIn: 'root' })

@@ -53,15 +53,15 @@
     <input matInput [(ngModel)]="model.fee" name="fee" />
   </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Latitude</mat-label>
-    <input matInput [(ngModel)]="model.latitude" name="latitude" />
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <mat-label>Longitude</mat-label>
-    <input matInput [(ngModel)]="model.longitude" name="longitude" />
-  </mat-form-field>
+<mat-form-field appearance="outline">
+  <mat-label>Coordinates</mat-label>
+  <input
+    matInput
+    [(ngModel)]="coordinates"
+    name="coordinates"
+    placeholder="41.981528078709026, 21.447355092824548"
+  />
+</mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Website</mat-label>

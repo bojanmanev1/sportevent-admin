@@ -21,6 +21,15 @@
         <span>Order</span>
         <input type="number" [(ngModel)]="form.order" />
       </label>
+      <label>
+  <span>Linked tournament</span>
+  <select [(ngModel)]="form.tournamentId">
+    <option value="">No tournament</option>
+    <option *ngFor="let tournament of tournaments" [value]="tournament.id">
+      {{ tournament.name }}
+    </option>
+  </select>
+</label>
 
       <label class="checkbox-row">
         <input type="checkbox" [(ngModel)]="form.active" />
