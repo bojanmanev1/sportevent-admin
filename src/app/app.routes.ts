@@ -21,6 +21,12 @@ export const routes: Routes = [
   loadComponent: () => import('./pages/slider/slider.component')
     .then(c => c.SliderAdminComponent)
 },
+{
+  path: 'analytics',
+  loadComponent: () =>
+    import('./pages/analytics/analytics')
+      .then(m => m.Analytics)
+},
 
 { path: '**', redirectTo: 'login' }
 ];

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { TournamentService, Tournament } from '../../services/tournament.service';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
@@ -33,6 +33,7 @@ imports: [
   MatInputModule,          
   MatSelectModule         
 ],
+providers: [DatePipe],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -85,6 +86,44 @@ async logout() {
   await signOut(this.auth);
   this.router.navigate(['/login']);
 }
+getRegistrationStatus(el: Tournament): string {
+    const rawReg = el.registration;
+    
+    // 1. If it's completely empty or missing
+    if (!rawReg) {
+      return 'Not open yet';
+    }
+
+    // 2. Convert Firestore Timestamp or string to native JS Date object safely
+    let regDate: Date;
+    if (typeof rawReg.toDate === 'function') {
+      regDate = rawReg.toDate();
+    } else {
+      regDate = new Date(rawReg);
+    }
+
+    // Fail-safe if the date is invalid
+    if (isNaN(regDate.getTime())) {
+      return 'Not open yet';
+    }
+
+    const now = new Date();
+    const timeDifferenceMs = regDate.getTime() - now.getTime();
+    const hoursRemaining = Math.ceil(timeDifferenceMs / (1000 * 60 * 60));
+
+    // 3. If the date has already passed
+    if (hoursRemaining <= 0) {
+      return 'Closed';
+    }
+
+    // 4. If it's within the final 48 hours
+    if (hoursRemaining <= 48) {
+      return `Open (${hoursRemaining}h remaining)`;
+    }
+
+    // 5. Otherwise, it is open with plenty of time
+    return 'Open';
+  }
 
   async openCreate() {
     const ref = this.dialog.open(TournamentFormDialogComponent, {

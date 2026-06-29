@@ -22,6 +22,10 @@
   <mat-icon>how_to_reg</mat-icon>
   Self registrations
 </button>
+<button mat-button routerLink="/analytics">
+  <mat-icon>analytics</mat-icon>
+  Analytics
+</button>
   </div>
 </mat-card>
 
@@ -71,10 +75,18 @@
       </ng-container>
 
       <!-- Registration -->
-      <ng-container matColumnDef="registration">
-        <th mat-header-cell *matHeaderCellDef> Registration </th>
-        <td mat-cell *matCellDef="let el"> {{ el.registration }} </td>
-      </ng-container>
+ <ng-container matColumnDef="registration">
+  <th mat-header-cell *matHeaderCellDef> Registration </th>
+  <td mat-cell *matCellDef="let el">
+    <span [ngClass]="{
+      'status-warning': getRegistrationStatus(el).includes('remaining'),
+      'status-closed': getRegistrationStatus(el) === 'Closed',
+      'status-not-open': getRegistrationStatus(el) === 'Not open yet'
+    }">
+      {{ getRegistrationStatus(el) }}
+    </span>
+  </td>
+</ng-container>
 
       <!-- Actions -->
       <ng-container matColumnDef="actions">

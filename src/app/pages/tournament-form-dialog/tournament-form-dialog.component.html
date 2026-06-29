@@ -39,14 +39,28 @@
     <input matInput [(ngModel)]="model.location" name="location" />
   </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Registration</mat-label>
-    <mat-select [(ngModel)]="model.registration">
-      <mat-option value="Open">Open</mat-option>
-      <mat-option value="Closed">Closed</mat-option>
-      <mat-option value="Not open yet">Not open yet</mat-option>
-    </mat-select>
-  </mat-form-field>
+<mat-form-field appearance="outline">
+  <mat-label>Registration Deadline</mat-label>
+  <input
+    matInput
+    [matDatepicker]="regPicker"
+    [(ngModel)]="model.registration"
+    name="registration"
+  />
+  @if(model.registration){
+    <button 
+      matSuffix 
+      mat-icon-button 
+      aria-label="Clear" 
+      (click)="model.registration = null; $event.stopPropagation()"
+      type="button"
+    >
+      ✕
+    </button>
+  }
+  <mat-datepicker-toggle matIconSuffix [for]="regPicker"></mat-datepicker-toggle>
+  <mat-datepicker #regPicker></mat-datepicker>
+</mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Fee</mat-label>

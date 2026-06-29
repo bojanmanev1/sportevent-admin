@@ -18,13 +18,12 @@ export interface SelfRegistration {
   name: string;
   sport: string;
   discipline?: string;
-  startDate?: any; // Firestore Timestamp or Date
+  startDate?: any; 
   location: string;
-  registration: 'Open' | 'Closed' | 'Not open yet';
+  registration?: any; // <-- Changed from 'Open' | 'Closed' | 'Not open yet' to accept any date/timestamp format
   fee?: any;
   website?: string;
   description?: string;
-
   status: 'pending' | 'approved' | 'rejected';
   createdAt?: any;
 }

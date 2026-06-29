@@ -1,0 +1,120 @@
+<div class="analytics-page">
+
+  <h1>Analytics Dashboard</h1>
+
+  <!-- TOP CARDS -->
+
+<div class="stats-grid">
+
+  <mat-card class="stat-card">
+
+    <div class="label">
+      Users (30 days)
+    </div>
+
+    <div class="value">
+      {{ stats.users30Days }}
+    </div>
+
+  </mat-card>
+
+  <mat-card class="stat-card">
+
+    <div class="label">
+      Views (30 days)
+    </div>
+
+    <div class="value">
+      {{ stats.pageViews30Days }}
+    </div>
+
+  </mat-card>
+
+  <mat-card class="stat-card">
+
+    <div class="label">
+      Total Users
+    </div>
+
+    <div class="value">
+      {{ stats.totalUsers }}
+    </div>
+
+  </mat-card>
+
+  <mat-card class="stat-card">
+
+    <div class="label">
+      Total Views
+    </div>
+
+    <div class="value">
+      {{ stats.totalPageViews }}
+    </div>
+
+  </mat-card>
+
+</div>
+
+  <!-- CHART -->
+
+  <mat-card class="chart-card">
+
+    <h2>Visitors Last 30 Days</h2>
+
+    <canvas
+      baseChart
+      [data]="lineChartData"
+      [options]="lineChartOptions"
+      [type]="'line'">
+    </canvas>
+
+  </mat-card>
+
+  <!-- TABLES -->
+
+  <div class="bottom-grid">
+
+    <!-- COUNTRIES -->
+
+    <mat-card>
+
+      <h2>Top Countries</h2>
+
+      <div
+        class="row"
+        *ngFor="let country of countries">
+
+        <span>{{ country.name }}</span>
+
+        <strong>
+          {{ country.users }}
+        </strong>
+
+      </div>
+
+    </mat-card>
+
+    <!-- PAGES -->
+
+    <mat-card>
+
+      <h2>Top Pages</h2>
+
+      <div
+        class="row"
+        *ngFor="let page of pages">
+
+        <span>{{ page.name }}</span>
+
+        <strong>
+          {{ page.views }}
+        </strong>
+
+      </div>
+
+    </mat-card>
+
+  </div>
+
+</div>

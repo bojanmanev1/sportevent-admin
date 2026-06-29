@@ -43,10 +43,12 @@
   </ng-container>
 
   <!-- Registration -->
-  <ng-container matColumnDef="registration">
-    <th mat-header-cell *matHeaderCellDef> Registration </th>
-    <td mat-cell *matCellDef="let el">{{ el.registration }}</td>
-  </ng-container>
+<ng-container matColumnDef="registration">
+  <th mat-header-cell *matHeaderCellDef> Registration Deadline </th>
+  <td mat-cell *matCellDef="let el">
+    {{ toDate(el.registration) ? (toDate(el.registration) | date:'dd.MM.yyyy') : '-' }}
+  </td>
+</ng-container>
 
   <!-- Fee -->
   <ng-container matColumnDef="fee">

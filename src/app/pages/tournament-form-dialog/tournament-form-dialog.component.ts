@@ -46,6 +46,7 @@ export class TournamentFormDialogComponent {
     this.sports = data?.sports || [];
     this.model = { ...(data?.tournament || {}) };
 
+    // 1. Parse Start Date
     const sd: any = this.model.startDate;
     if (sd?.toDate) {
       this.model.startDate = sd.toDate();
@@ -54,6 +55,17 @@ export class TournamentFormDialogComponent {
       this.model.startDate = isNaN(d.getTime()) ? null : d;
     } else if (!(sd instanceof Date)) {
       this.model.startDate = null;
+    }
+
+    // 2. Parse Registration Date (NEW)
+    const reg: any = this.model.registration;
+    if (reg?.toDate) {
+      this.model.registration = reg.toDate();
+    } else if (typeof reg === 'string' && reg) {
+      const d = new Date(reg);
+      this.model.registration = isNaN(d.getTime()) ? null : d;
+    } else if (!(reg instanceof Date)) {
+      this.model.registration = null; // Default to empty/null if it's not a valid date object
     }
 
     if (!this.model.status) {
@@ -92,6 +104,7 @@ export class TournamentFormDialogComponent {
       }
     }
 
+    // 3. Convert dates to Firestore Timestamps or null if empty (UPDATED)
     const payload = {
       ...this.model,
       latitude,
@@ -99,6 +112,9 @@ export class TournamentFormDialogComponent {
       startDate: this.model.startDate
         ? Timestamp.fromDate(this.model.startDate as Date)
         : null,
+      registration: this.model.registration
+        ? Timestamp.fromDate(this.model.registration as Date)
+        : null, // Properly saves as Timestamp or null
       status: this.model.status || 'upcoming'
     };
 

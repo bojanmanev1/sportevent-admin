@@ -11,7 +11,7 @@ export interface Tournament {
   sport: string;
   discipline?: string;
   location?: string;
-  registration?: 'Open' | 'Closed';
+  registration?: Date | any | null;
   startDate?: Date | null;
   fee?: string;
   description?: string;
