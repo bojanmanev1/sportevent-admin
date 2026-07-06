@@ -75,18 +75,21 @@
       </ng-container>
 
       <!-- Registration -->
- <ng-container matColumnDef="registration">
-  <th mat-header-cell *matHeaderCellDef> Registration </th>
-  <td mat-cell *matCellDef="let el">
-    <span [ngClass]="{
-      'status-warning': getRegistrationStatus(el).includes('remaining'),
-      'status-closed': getRegistrationStatus(el) === 'Closed',
-      'status-not-open': getRegistrationStatus(el) === 'Not open yet'
-    }">
-      {{ getRegistrationStatus(el) }}
-    </span>
-  </td>
-</ng-container>
+      <ng-container matColumnDef="registration">
+        <th mat-header-cell *matHeaderCellDef> Registration </th>
+        <td mat-cell *matCellDef="let el">
+          @let status = getRegistrationStatus(el);
+
+          <span [ngClass]="{
+            'status-warning': status.includes('remaining'),
+            'status-closed': status === 'Closed',
+            'status-not-open': status === 'Not open yet',
+            'status-open': status === 'Open'
+          }">
+            {{ status }}
+          </span>
+        </td>
+      </ng-container>
 
       <!-- Actions -->
       <ng-container matColumnDef="actions">

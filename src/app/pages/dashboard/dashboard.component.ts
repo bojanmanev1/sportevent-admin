@@ -89,39 +89,40 @@ async logout() {
 getRegistrationStatus(el: Tournament): string {
     const rawReg = el.registration;
     
-    // 1. If it's completely empty or missing
     if (!rawReg) {
       return 'Not open yet';
     }
 
-    // 2. Convert Firestore Timestamp or string to native JS Date object safely
     let regDate: Date;
-    if (typeof rawReg.toDate === 'function') {
-      regDate = rawReg.toDate();
+    if (typeof (rawReg as any).toDate === 'function') {
+      regDate = (rawReg as any).toDate();
     } else {
       regDate = new Date(rawReg);
     }
 
-    // Fail-safe if the date is invalid
     if (isNaN(regDate.getTime())) {
       return 'Not open yet';
     }
 
+    // Force date evaluation to 23:59:59.999 of that calendar day
+    const endOfDeadlineDay = new Date(regDate);
+    endOfDeadlineDay.setHours(23, 59, 59, 999);
+
     const now = new Date();
-    const timeDifferenceMs = regDate.getTime() - now.getTime();
+    const timeDifferenceMs = endOfDeadlineDay.getTime() - now.getTime();
+    
+    // Use Math.floor or Math.ceil based on your preference; 
+    // Math.max(0, ...) ensures it doesn't drop to negative hours mid-day
     const hoursRemaining = Math.ceil(timeDifferenceMs / (1000 * 60 * 60));
 
-    // 3. If the date has already passed
     if (hoursRemaining <= 0) {
       return 'Closed';
     }
 
-    // 4. If it's within the final 48 hours
     if (hoursRemaining <= 48) {
       return `Open (${hoursRemaining}h remaining)`;
     }
 
-    // 5. Otherwise, it is open with plenty of time
     return 'Open';
   }
 
